@@ -1,4 +1,4 @@
-import SamplePage from './pages/SamplePage';
+import CircleGame from './pages/CircleGame';
 import type { ReactNode } from 'react';
 
 interface RouteConfig {
@@ -10,9 +10,9 @@ interface RouteConfig {
 
 const routes: RouteConfig[] = [
   {
-    name: 'Sample Page',
+    name: 'Perfect Circle Game',
     path: '/',
-    element: <SamplePage />
+    element: <CircleGame />
   }
 ];
 
