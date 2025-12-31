@@ -1,6 +1,6 @@
 import React from 'react';
 import { WagmiProvider, createConfig, http } from 'wagmi';
-import { base, baseSepolia } from 'wagmi/chains';
+import { base } from 'wagmi/chains';
 import { coinbaseWallet } from 'wagmi/connectors';
 import {
   QueryClientProvider,
@@ -8,16 +8,15 @@ import {
 } from "@tanstack/react-query";
 
 export const config = createConfig({
-  chains: [base, baseSepolia],
+  chains: [base], // Only Base Mainnet
   connectors: [
     coinbaseWallet({
       appName: 'Perfect Circle',
-      preference: 'all',
+      preference: 'smartWalletOnly',
     }),
   ],
   transports: {
     [base.id]: http(),
-    [baseSepolia.id]: http(),
   },
 });
 
