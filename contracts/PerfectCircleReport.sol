@@ -1,19 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
-contract PerfectCircleReport is ERC721 {
-    using Counters for Counters.Counter;
-    Counters.Counter private _tokenIds;
+contract PerfectCircleReport is ERC721URIStorage {
+    uint256 private _nextTokenId;
 
     constructor() ERC721("PerfectCircleReport", "PCR") {}
 
-    function mintReport(address recipient) public returns (uint256) {
-        _tokenIds.increment();
-        uint256 newItemId = _tokenIds.current();
+    function mintReport(address recipient, string memory tokenURI) public returns (uint256) {
+        uint256 newItemId = _nextTokenId++;
         _mint(recipient, newItemId);
+        _setTokenURI(newItemId, tokenURI);
         return newItemId;
     }
 }

@@ -13,11 +13,15 @@ import { Download } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import { useConnect, useAccount, useDisconnect, useWriteContract } from 'wagmi';
 import { Button as ShadcnButton } from '@/components/ui/button';
+import { uploadFileToIPFS, uploadJSONToIPFS } from '@/utils/pinata';
 
 const CONTRACT_ADDRESS = "0x0000000000000000000000000000000000000000"; // Replace with deployed address
 const CONTRACT_ABI = [
   {
-    "inputs": [{ "internalType": "address", "name": "recipient", "type": "address" }],
+    "inputs": [
+      { "internalType": "address", "name": "recipient", "type": "address" },
+      { "internalType": "string", "name": "tokenURI", "type": "string" }
+    ],
     "name": "mintReport",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "nonpayable",
@@ -54,6 +58,7 @@ const CircleGame: React.FC = () => {
   const { disconnect } = useDisconnect();
   const { writeContract, isPending } = useWriteContract();
   const { address } = useAccount();
+  const [isMinting, setIsMinting] = useState(false); // Local loading state for uploads
 
   const handleConnect = () => {
     const coinbaseConnector = connectors.find(connector => connector.id === 'coinbaseWalletSDK');
@@ -65,24 +70,67 @@ const CircleGame: React.FC = () => {
     }
   };
 
-  const handleMint = () => {
+  const handleMint = async () => {
     if (!address) {
       toast({ title: "Wallet not connected", description: "Please connect your wallet first", variant: "destructive" });
       return;
     }
-    writeContract({
-      abi: CONTRACT_ABI,
-      address: CONTRACT_ADDRESS,
-      functionName: 'mintReport',
-      args: [address],
-    }, {
-      onSuccess: () => {
-        toast({ title: "Minting...", description: "Transaction sent to network" });
-      },
-      onError: (error) => {
-        toast({ title: "Minting Failed", description: error.message, variant: "destructive" });
-      }
-    });
+    if (!reportCardRef.current || !analysis || !score) return;
+
+    setIsMinting(true);
+    try {
+      // 1. Capture Image
+      const canvas = await html2canvas(reportCardRef.current, {
+        backgroundColor: '#2c3e50',
+        scale: 2,
+      });
+
+      const blob = await new Promise<Blob | null>(resolve => canvas.toBlob(resolve, 'image/png'));
+      if (!blob) throw new Error("Failed to generate image blob");
+
+      // 2. Upload to Pinata
+      toast({ title: "Uploading...", description: "Securing your report card on IPFS..." });
+      const imageCid = await uploadFileToIPFS(blob);
+      const imageUrl = `ipfs://${imageCid}`;
+
+      // 3. Create Metadata
+      const metadata = {
+        name: `Perfect Circle Report #${Date.now().toString().slice(-4)}`,
+        description: `A Perfect Circle attempt with a score of ${score}%.`,
+        image: imageUrl,
+        attributes: [
+          { trait_type: "Score", value: score },
+          { trait_type: "Roundness", value: analysis.roundness },
+          { trait_type: "Completeness", value: analysis.completeness },
+          { trait_type: "Attempts", value: attempts }
+        ]
+      };
+
+      const metadataCid = await uploadJSONToIPFS(metadata);
+      const tokenURI = `ipfs://${metadataCid}`;
+
+      // 4. Mint
+      writeContract({
+        abi: CONTRACT_ABI,
+        address: CONTRACT_ADDRESS,
+        functionName: 'mintReport',
+        args: [address, tokenURI],
+      }, {
+        onSuccess: () => {
+          toast({ title: "Minting...", description: "Transaction confirmed! Check your wallet." });
+          setIsMinting(false);
+        },
+        onError: (error) => {
+          toast({ title: "Minting Failed", description: error.message, variant: "destructive" });
+          setIsMinting(false);
+        }
+      });
+
+    } catch (error: any) {
+      console.error(error);
+      toast({ title: "Error", description: error.message || "Something went wrong", variant: "destructive" });
+      setIsMinting(false);
+    }
   };
 
   // Load best score from localStorage
@@ -695,10 +743,10 @@ const CircleGame: React.FC = () => {
             </Button>
             <Button
               onClick={handleMint}
-              disabled={isPending}
+              disabled={isPending || isMinting}
               className="w-full bg-purple-600 hover:bg-purple-700 text-white"
             >
-              {isPending ? 'Minting...' : 'Mint Score on Chain'}
+              {isPending || isMinting ? 'Minting...' : 'Mint Score on Chain'}
             </Button>
           </DialogFooter>
         </DialogContent>
