@@ -11,9 +11,10 @@ import {
 } from "@/components/ui/dialog";
 import { Download } from 'lucide-react';
 import html2canvas from 'html2canvas';
-import { useConnect, useAccount, useDisconnect, useWriteContract } from 'wagmi';
+import { useAccount, useWriteContract } from 'wagmi';
 import { Button as ShadcnButton } from '@/components/ui/button';
 import { uploadFileToIPFS, uploadJSONToIPFS } from '@/utils/pinata';
+import { WalletComponent } from '@/components/WalletComponent';
 
 const CONTRACT_ADDRESS = "0x0000000000000000000000000000000000000000"; // Replace with deployed address
 const CONTRACT_ABI = [
@@ -53,35 +54,10 @@ const CircleGame: React.FC = () => {
   const [analysis, setAnalysis] = useState<CircleAnalysis | null>(null);
   const [attempts, setAttempts] = useState(0);
   const [isPhotocardOpen, setIsPhotocardOpen] = useState(false);
-  const { connectors, connect } = useConnect();
   const { isConnected } = useAccount();
-  const { disconnect } = useDisconnect();
   const { writeContract, isPending } = useWriteContract();
   const { address } = useAccount();
   const [isMinting, setIsMinting] = useState(false); // Local loading state for uploads
-
-  const handleConnect = () => {
-    console.log("Connect button clicked");
-    console.log("Available connectors:", connectors.map(c => ({ id: c.id, name: c.name })));
-
-    // Priority: Coinbase Wallet SDK -> Injected -> Others
-    const coinbaseConnector = connectors.find(connector => connector.id === 'coinbaseWalletSDK');
-    const injectedConnector = connectors.find(connector => connector.id === 'injected');
-
-    if (coinbaseConnector) {
-      console.log("Connecting with Coinbase Wallet SDK");
-      connect({ connector: coinbaseConnector });
-    } else if (injectedConnector) {
-      console.log("Connecting with Injected Wallet");
-      connect({ connector: injectedConnector });
-    } else if (connectors.length > 0) {
-      console.log("Connecting with fallback connector:", connectors[0].id);
-      connect({ connector: connectors[0] });
-    } else {
-      console.error("No connectors found!");
-      toast({ title: "Error", description: "No wallet connectors found", variant: "destructive" });
-    }
-  };
 
   const handleMint = async () => {
     if (!address) {
@@ -505,23 +481,10 @@ const CircleGame: React.FC = () => {
         </div>
         <p className="text-gray-300 text-lg lg:text-xl mt-1 opacity-80">Class assignment: Draw a perfect circle.</p>
         <div className="absolute top-4 right-4 z-50">
-          {isConnected ? (
-            <div className="flex items-center gap-2">
-              <span className="text-white text-sm bg-black/20 px-2 py-1 rounded hidden sm:inline-block">
-                {address?.slice(0, 6)}...{address?.slice(-4)}
-              </span>
-              <ShadcnButton variant="destructive" size="sm" onClick={() => disconnect()}>Disconnect</ShadcnButton>
-            </div>
-          ) : (
-            <ShadcnButton
-              onClick={handleConnect}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Connect Smart Wallet
-            </ShadcnButton>
-          )}
+          <WalletComponent />
         </div>
       </div>
+
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full max-w-6xl h-full lg:h-auto z-10">
 
@@ -764,7 +727,7 @@ const CircleGame: React.FC = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </div >
   );
 };
 
