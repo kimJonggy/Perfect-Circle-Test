@@ -61,16 +61,25 @@ const CircleGame: React.FC = () => {
   const [isMinting, setIsMinting] = useState(false); // Local loading state for uploads
 
   const handleConnect = () => {
+    console.log("Connect button clicked");
+    console.log("Available connectors:", connectors.map(c => ({ id: c.id, name: c.name })));
+
     // Priority: Coinbase Wallet SDK -> Injected -> Others
     const coinbaseConnector = connectors.find(connector => connector.id === 'coinbaseWalletSDK');
     const injectedConnector = connectors.find(connector => connector.id === 'injected');
 
     if (coinbaseConnector) {
+      console.log("Connecting with Coinbase Wallet SDK");
       connect({ connector: coinbaseConnector });
     } else if (injectedConnector) {
+      console.log("Connecting with Injected Wallet");
       connect({ connector: injectedConnector });
     } else if (connectors.length > 0) {
+      console.log("Connecting with fallback connector:", connectors[0].id);
       connect({ connector: connectors[0] });
+    } else {
+      console.error("No connectors found!");
+      toast({ title: "Error", description: "No wallet connectors found", variant: "destructive" });
     }
   };
 
