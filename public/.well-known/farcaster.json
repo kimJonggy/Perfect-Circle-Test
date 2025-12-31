@@ -1,0 +1,31 @@
+{
+  "accountAssociation": {
+    "header": "eyJmaWQiOjE0ODU1MDIsInR5cGUiOiJhdXRoIiwia2V5IjoiMHg5N0U5ZTFhRjc4NjYyNzgzZjNjNjNkMzYwQmE5QWUwNzgzYTdlMzc5In0",
+    "payload": "eyJkb21haW4iOiJiYXNlZDIwNDgudmVyY2VsLmFwcCJ9",
+    "signature": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABREjJ62nfugQlruSN3__zNZslwJYE-Zc9O2QDit4r_7hRIEzsNXzD1UOBbCp723LGhnHVSJZ7rTJimr3AMHOYRgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAl8ZgIay2xclZzG8RWZzuWvO8j9R0fus3XxDee9lRlVy8FAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACKeyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiNm1hWnVQZFR1Ri1tQ2J0YUZKTm9IUG9ua0IxSGxyMkZnMzdsTVhuRDhxVSIsIm9yaWdpbiI6Imh0dHBzOi8va2V5cy5jb2luYmFzZS5jb20iLCJjcm9zc09yaWdpbiI6ZmFsc2V9AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  "baseBuilder": {
+    "ownerAddress": "0x81fCFbD27EDe50277C96f3287A6B93FB7918DF29"
+  },
+  "miniapp": {
+    "version": "1",
+    "name": "Perfect Circle",
+    "homeUrl": "https://perfectcircle-based.vercel.app/",
+    "iconUrl": "https://perfectcircle-based.vercel.app/icon.png",
+    "splashImageUrl": "https://perfectcircle-based.vercel.app/splash.png",
+    "splashBackgroundColor": "#0A0E1A",
+    "subtitle": "Draw a perfect circle on Base",
+    "description": "Draw a circle and mint it as NFT on Base.",
+    "primaryCategory": "entertainment",
+    "tags": [
+      "game",
+      "art",
+      "base"
+    ],
+    "tagline": "Draw a Perfect Circle",
+    "ogTitle": "Perfect Circle",
+    "ogDescription": "Draw a Perfect Circle on Base.",
+    "ogImageUrl": "https://perfectcircle-based.vercel.app/og.png",
+    "noindex": true
+  }
+}
