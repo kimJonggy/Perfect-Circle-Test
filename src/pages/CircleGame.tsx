@@ -61,11 +61,15 @@ const CircleGame: React.FC = () => {
   const [isMinting, setIsMinting] = useState(false); // Local loading state for uploads
 
   const handleConnect = () => {
+    // Priority: Coinbase Wallet SDK -> Injected -> Others
     const coinbaseConnector = connectors.find(connector => connector.id === 'coinbaseWalletSDK');
+    const injectedConnector = connectors.find(connector => connector.id === 'injected');
+
     if (coinbaseConnector) {
       connect({ connector: coinbaseConnector });
-    } else {
-      // Fallback or generic connect
+    } else if (injectedConnector) {
+      connect({ connector: injectedConnector });
+    } else if (connectors.length > 0) {
       connect({ connector: connectors[0] });
     }
   };

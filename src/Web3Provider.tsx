@@ -12,7 +12,7 @@ export const config = createConfig({
   connectors: [
     coinbaseWallet({
       appName: 'Perfect Circle',
-      preference: 'smartWalletOnly',
+      preference: 'all',
     }),
   ],
   transports: {
