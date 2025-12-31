@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "tsgo -p tsconfig.check.json; npx biome lint"
+    "lint": "tsc --noEmit -p tsconfig.check.json; npx biome lint"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^5.4.0",
