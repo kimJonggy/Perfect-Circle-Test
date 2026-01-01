@@ -12,9 +12,9 @@ import {
 import { Download } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import { useAccount, useWriteContract } from 'wagmi';
-import { Button as ShadcnButton } from '@/components/ui/button';
 import { uploadFileToIPFS, uploadJSONToIPFS } from '@/utils/pinata';
 import { WalletComponent } from '@/components/WalletComponent';
+import { useFarcasterContext } from '@/hooks/useFarcasterContext';
 
 const CONTRACT_ADDRESS = "0x0000000000000000000000000000000000000000"; // Replace with deployed address
 const CONTRACT_ABI = [
@@ -54,10 +54,10 @@ const CircleGame: React.FC = () => {
   const [analysis, setAnalysis] = useState<CircleAnalysis | null>(null);
   const [attempts, setAttempts] = useState(0);
   const [isPhotocardOpen, setIsPhotocardOpen] = useState(false);
-  const { isConnected } = useAccount();
   const { writeContract, isPending } = useWriteContract();
   const { address } = useAccount();
   const [isMinting, setIsMinting] = useState(false); // Local loading state for uploads
+  const { user: farcasterUser } = useFarcasterContext();
 
   const handleMint = async () => {
     if (!address) {
@@ -85,13 +85,14 @@ const CircleGame: React.FC = () => {
       // 3. Create Metadata
       const metadata = {
         name: `Perfect Circle Report #${Date.now().toString().slice(-4)}`,
-        description: `A Perfect Circle attempt with a score of ${score}%.`,
+        description: `A Perfect Circle attempt with a score of ${score}%.${farcasterUser ? ` Drawn by @${farcasterUser.username || farcasterUser.fid}` : ''}`,
         image: imageUrl,
         attributes: [
           { trait_type: "Score", value: score },
           { trait_type: "Roundness", value: analysis.roundness },
           { trait_type: "Completeness", value: analysis.completeness },
-          { trait_type: "Attempts", value: attempts }
+          { trait_type: "Attempts", value: attempts },
+          ...(farcasterUser ? [{ trait_type: "Farcaster FID", value: farcasterUser.fid }] : [])
         ]
       };
 
@@ -480,7 +481,17 @@ const CircleGame: React.FC = () => {
           <h1 className="text-3xl lg:text-5xl font-bold chalk-text tracking-wider">Perfect Circle</h1>
         </div>
         <p className="text-gray-300 text-lg lg:text-xl mt-1 opacity-80">Class assignment: Draw a perfect circle.</p>
-        <div className="absolute top-4 right-4 z-50">
+        <div className="absolute top-4 right-4 z-50 flex items-center gap-3">
+          {farcasterUser && (
+            <div className="flex items-center gap-2 bg-purple-900/50 px-3 py-1.5 rounded-full border border-purple-500/30">
+              {farcasterUser.pfpUrl && (
+                <img src={farcasterUser.pfpUrl} alt="" className="w-6 h-6 rounded-full" />
+              )}
+              <span className="text-purple-200 text-sm font-medium">
+                @{farcasterUser.username || `fid:${farcasterUser.fid}`}
+              </span>
+            </div>
+          )}
           <WalletComponent />
         </div>
       </div>
