@@ -16,7 +16,7 @@ import { uploadFileToIPFS, uploadJSONToIPFS } from '@/utils/pinata';
 import { WalletComponent } from '@/components/WalletComponent';
 import { useFarcasterContext } from '@/hooks/useFarcasterContext';
 
-const CONTRACT_ADDRESS = "0x0000000000000000000000000000000000000000"; // Replace with deployed address
+const CONTRACT_ADDRESS = "0x144be29ad3b8ad3c07d4db055ba7155cc5d9cfcd"; // Deployed on Base Mainnet
 const CONTRACT_ABI = [
   {
     "inputs": [

@@ -1,7 +1,7 @@
 
 import { createWalletClient, http, publicActions, parseEther } from 'viem'
 import { privateKeyToAccount } from 'viem/accounts'
-import { baseSepolia } from 'viem/chains'
+import { base } from 'viem/chains'
 import fs from 'fs'
 import path from 'path'
 import solc from 'solc'
@@ -79,12 +79,12 @@ async function main() {
     const bytecode = contractFile.evm.bytecode.object
 
     console.log("Compilation successful!")
-    console.log("Deploying to Base Sepolia...")
+    console.log("Deploying to Base Mainnet...")
 
     const account = privateKeyToAccount(PRIVATE_KEY)
     const client = createWalletClient({
         account,
-        chain: baseSepolia,
+        chain: base,
         transport: http()
     }).extend(publicActions)
 
