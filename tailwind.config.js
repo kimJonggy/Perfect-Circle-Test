@@ -5,7 +5,8 @@ export default {
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
-    './node_modules/streamdown/dist/**/*.js'
+    './node_modules/streamdown/dist/**/*.js',
+    './node_modules/@coinbase/onchainkit/dist/**/*.{js,css}',
   ],
   safelist: ['border', 'border-border'],
   prefix: '',

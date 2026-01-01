@@ -1,55 +1,48 @@
-
-import {
-    ConnectWallet,
-    Wallet,
-    WalletDropdown,
-    WalletDropdownDisconnect,
-    WalletDropdownBasename,
-    WalletDropdownFundLink,
-    WalletDropdownLink,
-} from '@coinbase/onchainkit/wallet';
-import {
-    Address,
-    Avatar,
-    Name,
-    Identity,
-    EthBalance,
-} from '@coinbase/onchainkit/identity';
-import { color } from '@coinbase/onchainkit/theme';
+import { useAccount, useConnect, useDisconnect } from 'wagmi';
+import { Button } from '@/components/ui/button';
 
 export function WalletComponent() {
+    const { address, isConnected } = useAccount();
+    const { connect, connectors, isPending } = useConnect();
+    const { disconnect } = useDisconnect();
+
+    // Format address for display
+    const formatAddress = (addr: string) => {
+        return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+    };
+
+    if (isConnected && address) {
+        return (
+            <div className="flex items-center gap-2">
+                <div className="bg-blue-900/50 px-3 py-2 rounded-lg border border-blue-500/30">
+                    <span className="text-blue-200 text-sm font-mono">
+                        {formatAddress(address)}
+                    </span>
+                </div>
+                <Button
+                    onClick={() => disconnect()}
+                    variant="outline"
+                    size="sm"
+                    className="text-xs"
+                >
+                    Disconnect
+                </Button>
+            </div>
+        );
+    }
+
     return (
-        <div className="flex justify-end p-4">
-            <Wallet>
-                <ConnectWallet>
-                    <Avatar className="h-6 w-6" />
-                    <Name />
-                </ConnectWallet>
-
-                <WalletDropdown>
-                    <Identity className="px-4 pt-3 pb-2" hasCopyAddressOnClick>
-                        <Avatar />
-                        <Name />
-                        <Address className={color.foregroundMuted} />
-                        <EthBalance />
-                    </Identity>
-
-                    <WalletDropdownBasename />
-
-                    <WalletDropdownLink
-                        icon="wallet"
-                        href="https://keys.coinbase.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        Wallet
-                    </WalletDropdownLink>
-
-                    <WalletDropdownFundLink />
-
-                    <WalletDropdownDisconnect />
-                </WalletDropdown>
-            </Wallet>
-        </div>
+        <Button
+            onClick={() => {
+                const connector = connectors[0]; // Use first connector (coinbaseWallet)
+                if (connector) {
+                    connect({ connector });
+                }
+            }}
+            disabled={isPending}
+            className="bg-blue-600 hover:bg-blue-700"
+        >
+            {isPending ? 'Connecting...' : '💼 Connect Wallet'}
+        </Button>
     );
 }
