@@ -14,7 +14,7 @@ import html2canvas from 'html2canvas';
 import { useAccount, useWriteContract } from 'wagmi';
 import { uploadFileToIPFS, uploadJSONToIPFS } from '@/utils/pinata';
 import { WalletComponent } from '@/components/WalletComponent';
-import { useFarcasterContext } from '@/hooks/useFarcasterContext';
+import { useFarcasterContext, useSafeAreaInsets } from '@/hooks/useFarcasterContext';
 import { FarcasterLogin } from '@/components/FarcasterLogin';
 
 const CONTRACT_ADDRESS = "0x144be29ad3b8ad3c07d4db055ba7155cc5d9cfcd"; // Deployed on Base Mainnet
@@ -59,6 +59,7 @@ const CircleGame: React.FC = () => {
   const { address } = useAccount();
   const [isMinting, setIsMinting] = useState(false); // Local loading state for uploads
   const { user: farcasterUser } = useFarcasterContext();
+  const safeArea = useSafeAreaInsets();
 
   const handleMint = async () => {
     if (!address) {
@@ -474,21 +475,35 @@ const CircleGame: React.FC = () => {
 
 
   return (
-    <div className="chalkboard-bg min-h-screen w-full flex flex-col items-center justify-center p-4 overflow-hidden font-patrick">
-
-      <div className="text-center mb-6 z-10">
-        <div className="flex items-center justify-center gap-3">
-          <svg className="w-12 h-12 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-          <h1 className="text-3xl lg:text-5xl font-bold chalk-text tracking-wider">Perfect Circle</h1>
+    <div
+      className="chalkboard-bg min-h-screen w-full flex flex-col items-center justify-center p-4 overflow-hidden font-patrick"
+      style={{
+        paddingTop: `${Math.max(safeArea.top, 16)}px`,
+        paddingBottom: `${Math.max(safeArea.bottom, 16)}px`,
+        paddingLeft: `${Math.max(safeArea.left, 16)}px`,
+        paddingRight: `${Math.max(safeArea.right, 16)}px`,
+      }}
+    >
+      {/* Header Bar */}
+      <div
+        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-2 bg-black/30 backdrop-blur-sm"
+        style={{ paddingTop: `${Math.max(safeArea.top, 8)}px` }}
+      >
+        {/* Logo/Title */}
+        <div className="flex items-center gap-2">
+          <svg className="w-8 h-8 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+          <span className="text-xl font-bold chalk-text hidden sm:inline">Perfect Circle</span>
         </div>
-        <p className="text-gray-300 text-lg lg:text-xl mt-1 opacity-80">Class assignment: Draw a perfect circle.</p>
-        <div className="absolute top-4 right-4 z-50 flex items-center gap-3">
+
+        {/* User Controls */}
+        <div className="flex items-center gap-2">
+          {/* Farcaster User Badge (from context) */}
           {farcasterUser && (
-            <div className="flex items-center gap-2 bg-purple-900/50 px-3 py-1.5 rounded-full border border-purple-500/30">
+            <div className="hidden sm:flex items-center gap-2 bg-purple-900/50 px-3 py-1.5 rounded-full border border-purple-500/30">
               {farcasterUser.pfpUrl && (
-                <img src={farcasterUser.pfpUrl} alt="" className="w-6 h-6 rounded-full" />
+                <img src={farcasterUser.pfpUrl} alt="" className="w-5 h-5 rounded-full" />
               )}
-              <span className="text-purple-200 text-sm font-medium">
+              <span className="text-purple-200 text-xs font-medium">
                 @{farcasterUser.username || `fid:${farcasterUser.fid}`}
               </span>
             </div>
@@ -496,6 +511,17 @@ const CircleGame: React.FC = () => {
           <FarcasterLogin />
           <WalletComponent />
         </div>
+      </div>
+
+      {/* Spacer for fixed header */}
+      <div className="h-16" />
+
+      <div className="text-center mb-6 z-10">
+        <div className="flex items-center justify-center gap-3">
+          <svg className="w-12 h-12 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+          <h1 className="text-3xl lg:text-5xl font-bold chalk-text tracking-wider">Perfect Circle</h1>
+        </div>
+        <p className="text-gray-300 text-lg lg:text-xl mt-1 opacity-80">Class assignment: Draw a perfect circle.</p>
       </div>
 
 
