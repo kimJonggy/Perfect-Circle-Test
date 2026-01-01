@@ -4,9 +4,6 @@
     "payload": "",
     "signature": ""
   },
-  "baseBuilder": {
-    "ownerAddress": "0x81fCFbD27EDe50277C96f3287A6B93FB7918DF29"
-  },
   "miniapp": {
     "version": "1",
     "name": "Perfect Circle",
@@ -15,17 +12,22 @@
     "splashImageUrl": "https://perfectcircle-based.vercel.app/splash.png",
     "splashBackgroundColor": "#0A0E1A",
     "subtitle": "Draw a perfect circle on Base",
-    "description": "Draw a circle and mint it as NFT on Base.",
+    "description": "Challenge yourself to draw the most perfect circle. Get graded on your accuracy and mint your score as an NFT on Base!",
+    "screenshotUrls": [
+      "https://perfectcircle-based.vercel.app/preview.png"
+    ],
     "primaryCategory": "entertainment",
     "tags": [
       "game",
       "art",
-      "base"
+      "base",
+      "nft"
     ],
-    "tagline": "Draw a Perfect Circle",
+    "heroImageUrl": "https://perfectcircle-based.vercel.app/og.png",
+    "tagline": "How perfect is your circle?",
     "ogTitle": "Perfect Circle",
-    "ogDescription": "Draw a Perfect Circle on Base.",
+    "ogDescription": "Draw a perfect circle and mint your score as an NFT on Base.",
     "ogImageUrl": "https://perfectcircle-based.vercel.app/og.png",
-    "noindex": true
+    "noindex": false
   }
 }
