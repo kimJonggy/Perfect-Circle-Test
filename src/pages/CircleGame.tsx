@@ -477,12 +477,12 @@ const CircleGame: React.FC = () => {
 
   return (
     <div
-      className="chalkboard-bg min-h-screen w-full flex flex-col items-center justify-center p-4 overflow-hidden font-patrick"
+      className="chalkboard-bg min-h-screen min-h-[100dvh] w-full flex flex-col items-center overflow-hidden font-patrick"
       style={{
-        paddingTop: `${Math.max(safeArea.top, 16)}px`,
-        paddingBottom: `${Math.max(safeArea.bottom, 16)}px`,
-        paddingLeft: `${Math.max(safeArea.left, 16)}px`,
-        paddingRight: `${Math.max(safeArea.right, 16)}px`,
+        paddingTop: `${Math.max(safeArea.top, 8)}px`,
+        paddingBottom: `${Math.max(safeArea.bottom, 100)}px`,
+        paddingLeft: `${Math.max(safeArea.left, 8)}px`,
+        paddingRight: `${Math.max(safeArea.right, 8)}px`,
       }}
     >
       {/* Onboarding Modal - shows on first visit */}
@@ -490,50 +490,49 @@ const CircleGame: React.FC = () => {
 
       {/* Header Bar */}
       <div
-        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-2 bg-black/30 backdrop-blur-sm"
-        style={{ paddingTop: `${Math.max(safeArea.top, 8)}px` }}
+        className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-3 py-2 bg-black/50 backdrop-blur-md"
+        style={{ paddingTop: `${Math.max(safeArea.top, 4)}px` }}
       >
-        {/* Logo/Title */}
-        <div className="flex items-center gap-2">
-          <svg className="w-8 h-8 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-          <span className="text-xl font-bold chalk-text hidden sm:inline">Perfect Circle</span>
-        </div>
+        <span className="text-base sm:text-xl font-bold chalk-text">🎯 Perfect Circle</span>
 
         {/* User Controls */}
-        <div className="flex items-center gap-2">
-          {/* Farcaster User Badge (from context) */}
-          {farcasterUser && (
-            <div className="hidden sm:flex items-center gap-2 bg-purple-900/50 px-3 py-1.5 rounded-full border border-purple-500/30">
-              {farcasterUser.pfpUrl && (
-                <img src={farcasterUser.pfpUrl} alt="" className="w-5 h-5 rounded-full" />
-              )}
-              <span className="text-purple-200 text-xs font-medium">
-                @{farcasterUser.username || `fid:${farcasterUser.fid}`}
-              </span>
-            </div>
-          )}
+        <div className="flex items-center gap-1 sm:gap-2">
           <FarcasterLogin />
           <WalletComponent />
         </div>
       </div>
 
-      {/* Spacer for fixed header */}
-      <div className="h-16" />
+      <div className="h-12 sm:h-14" />
 
-      <div className="text-center mb-6 z-10">
-        <div className="flex items-center justify-center gap-3">
-          <svg className="w-12 h-12 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-          <h1 className="text-3xl lg:text-5xl font-bold chalk-text tracking-wider">Perfect Circle</h1>
-        </div>
-        <p className="text-gray-300 text-lg lg:text-xl mt-1 opacity-80">Class assignment: Draw a perfect circle.</p>
-      </div>
+      {/* Score display - compact for mobile */}
+      {
+        score !== null && (
+          <div className="w-full max-w-md px-3 py-2 flex items-center justify-center gap-3 z-20">
+            <div className={`text-4xl sm:text-5xl font-bold ${getGradeColor(score)} chalk-text`} style={{ textShadow: '2px 2px 0px rgba(0,0,0,0.5)' }}>
+              {getGrade(score)}
+            </div>
+            <div className="text-left">
+              <div className="text-lg sm:text-xl text-white/90 chalk-text">{score}%</div>
+              <div className="text-xs text-gray-400">Best: {bestScore}% | Try #{attempts}</div>
+            </div>
+          </div>
+        )
+      }
+
+      {
+        score === null && (
+          <div className="text-center py-1 z-10">
+            <p className="text-gray-300 text-sm opacity-80">Draw a perfect circle below</p>
+          </div>
+        )
+      }
 
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full max-w-6xl h-full lg:h-auto z-10">
+      <div className="flex flex-col lg:grid lg:grid-cols-3 gap-4 lg:gap-8 w-full max-w-6xl flex-1 z-10 px-2">
 
-        {/* Notebook Drawing Area */}
-        <div className="lg:col-span-2 relative">
-          <div className="notebook-paper w-full h-[50vh] min-h-[350px] lg:h-[500px] rounded-sm relative flex flex-col items-center justify-center p-4 lg:p-8 transform -rotate-1 transition-all">
+        {/* Notebook Drawing Area - fullwidth on mobile */}
+        <div className="lg:col-span-2 relative flex-1">
+          <div className="notebook-paper w-full h-[55vh] sm:h-[50vh] min-h-[280px] lg:h-[500px] rounded-sm relative flex flex-col items-center justify-center p-2 sm:p-4 lg:p-8 transform sm:-rotate-1 transition-all">
 
             <div
               ref={containerRef}
@@ -552,21 +551,21 @@ const CircleGame: React.FC = () => {
               />
 
               {!isDrawing && currentPath.length === 0 && (
-                <span className="text-gray-400 text-xl lg:text-2xl group-hover:opacity-50 transition-opacity pointer-events-none select-none font-patrick text-center">
-                  ( Draw a circle here )
+                <span className="text-gray-400 text-lg sm:text-xl lg:text-2xl group-hover:opacity-50 transition-opacity pointer-events-none select-none font-patrick text-center">
+                  Draw here ✏️
                 </span>
               )}
             </div>
           </div>
 
-          {/* Decorations */}
-          <div className="hidden sm:flex absolute -bottom-6 -right-4 w-48 h-12 bg-yellow-600 border border-yellow-800 rounded shadow-xl transform rotate-12 items-center justify-around px-2 z-30 opacity-90 pointer-events-none">
+          {/* Decorations - hidden on mobile */}
+          <div className="hidden lg:flex absolute -bottom-6 -right-4 w-48 h-12 bg-yellow-600 border border-yellow-800 rounded shadow-xl transform rotate-12 items-center justify-around px-2 z-30 opacity-90 pointer-events-none">
             <div className="text-[10px] text-yellow-900 font-sans font-bold">RULER 30cm</div>
             <div className="h-full border-r border-yellow-800/50"></div>
             <div className="h-1/2 border-r border-yellow-800/50"></div>
             <div className="h-full border-r border-yellow-800/50"></div>
           </div>
-          <div className="absolute bottom-10 -left-6 w-8 h-20 bg-white rounded shadow-lg transform -rotate-45 z-30 pointer-events-none opacity-90"></div>
+          <div className="hidden lg:block absolute bottom-10 -left-6 w-8 h-20 bg-white rounded shadow-lg transform -rotate-45 z-30 pointer-events-none opacity-90"></div>
 
           <div className="mt-6 z-20 w-full flex justify-center gap-4">
             <button onClick={clearCanvas} className="cta cta-orange">
