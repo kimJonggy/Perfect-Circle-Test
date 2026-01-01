@@ -16,6 +16,7 @@ import { uploadFileToIPFS, uploadJSONToIPFS } from '@/utils/pinata';
 import { WalletComponent } from '@/components/WalletComponent';
 import { useFarcasterContext, useSafeAreaInsets } from '@/hooks/useFarcasterContext';
 import { FarcasterLogin } from '@/components/FarcasterLogin';
+import { OnboardingModal } from '@/components/OnboardingModal';
 
 const CONTRACT_ADDRESS = "0x144be29ad3b8ad3c07d4db055ba7155cc5d9cfcd"; // Deployed on Base Mainnet
 const CONTRACT_ABI = [
@@ -484,6 +485,9 @@ const CircleGame: React.FC = () => {
         paddingRight: `${Math.max(safeArea.right, 16)}px`,
       }}
     >
+      {/* Onboarding Modal - shows on first visit */}
+      <OnboardingModal />
+
       {/* Header Bar */}
       <div
         className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-2 bg-black/30 backdrop-blur-sm"
