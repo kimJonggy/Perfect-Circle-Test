@@ -28,6 +28,7 @@
     "ogTitle": "Perfect Circle",
     "ogDescription": "Draw a perfect circle and mint your score as an NFT on Base.",
     "ogImageUrl": "https://perfectcircle-based.vercel.app/og.png",
+    "webhookUrl": "https://perfectcircle-based.vercel.app/api/webhook",
     "noindex": true
   }
 }
