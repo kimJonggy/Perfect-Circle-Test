@@ -2,7 +2,7 @@
  * Notifications Module for Farcaster Mini App
  * 
  * ⚠️ PRODUCTION NOTE: Replace this in-memory store with a real database
- * (Postgres, Redis, Supabase, etc.) before going live.
+ * (Postgres, Redis, Vercel KV, etc.) before going live. Currently using Pinata for IPFS storage.
  */
 
 // Types
