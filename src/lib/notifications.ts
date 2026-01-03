@@ -1,8 +1,9 @@
+import { kv } from '@vercel/kv';
+
 /**
  * Notifications Module for Farcaster Mini App
  * 
- * ⚠️ PRODUCTION NOTE: Replace this in-memory store with a real database
- * (Postgres, Redis, Vercel KV, etc.) before going live. Currently using Pinata for IPFS storage.
+ * Uses Vercel KV (Redis) for persistent storage.
  */
 
 // Types
@@ -14,33 +15,32 @@ export interface NotificationDetails {
 export interface UserNotificationRecord {
     fid: number;
     notificationDetails: NotificationDetails;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: string; // Dates stored as strings in JSON
+    updatedAt: string;
 }
 
-// ============================================================
-// MOCK IN-MEMORY DATABASE
-// Replace with real database in production!
-// ============================================================
-const notificationStore = new Map<number, UserNotificationRecord>();
+const PREFIX = 'notification:';
 
 /**
  * Get notification details for a user
  */
-export function getUserNotificationDetails(fid: number): NotificationDetails | null {
-    const record = notificationStore.get(fid);
+export async function getUserNotificationDetails(fid: number): Promise<NotificationDetails | null> {
+    const record = await kv.get<UserNotificationRecord>(`${PREFIX}${fid}`);
     return record?.notificationDetails ?? null;
 }
 
 /**
  * Save notification details for a user
  */
-export function setUserNotificationDetails(
+export async function setUserNotificationDetails(
     fid: number,
     details: NotificationDetails
-): UserNotificationRecord {
-    const now = new Date();
-    const existing = notificationStore.get(fid);
+): Promise<UserNotificationRecord> {
+    const now = new Date().toISOString();
+    const key = `${PREFIX}${fid}`;
+
+    // Check for existing record to preserve createdAt
+    const existing = await kv.get<UserNotificationRecord>(key);
 
     const record: UserNotificationRecord = {
         fid,
@@ -49,22 +49,16 @@ export function setUserNotificationDetails(
         updatedAt: now,
     };
 
-    notificationStore.set(fid, record);
+    await kv.set(key, record);
     return record;
 }
 
 /**
  * Delete notification details for a user
  */
-export function deleteUserNotificationDetails(fid: number): boolean {
-    return notificationStore.delete(fid);
-}
-
-/**
- * Get all stored users (for debugging)
- */
-export function getAllUsers(): UserNotificationRecord[] {
-    return Array.from(notificationStore.values());
+export async function deleteUserNotificationDetails(fid: number): Promise<boolean> {
+    const count = await kv.del(`${PREFIX}${fid}`);
+    return count > 0;
 }
 
 // ============================================================
@@ -94,7 +88,7 @@ export async function sendMiniAppNotification(
     const { fid, title, body, targetUrl } = params;
 
     // Get user's notification details
-    const details = getUserNotificationDetails(fid);
+    const details = await getUserNotificationDetails(fid);
 
     if (!details) {
         return {
@@ -113,7 +107,7 @@ export async function sendMiniAppNotification(
                 notificationId: crypto.randomUUID(),
                 title,
                 body,
-                targetUrl: targetUrl ?? 'https://perfectcircle-based.vercel.app/',
+                targetUrl: targetUrl ?? process.env.NEXT_PUBLIC_URL ?? 'https://perfectcircle-based.vercel.app/',
                 tokens: [details.token],
             }),
         });
@@ -134,7 +128,7 @@ export async function sendMiniAppNotification(
         // Handle invalid token
         if (response.status === 401 || response.status === 403) {
             // Token is invalid, remove it
-            deleteUserNotificationDetails(fid);
+            await deleteUserNotificationDetails(fid);
             return {
                 success: false,
                 error: 'Invalid token - removed from store',

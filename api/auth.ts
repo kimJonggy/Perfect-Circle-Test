@@ -38,7 +38,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         const result = await client.verifyJwt({
             token,
             domain,
-        });
+        }) as any;
 
         // Return the verified FID
         return res.status(200).json({
@@ -55,11 +55,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             return res.status(401).json({ error: 'Invalid token' });
         }
 
-        if (error instanceof Errors.ExpiredTokenError) {
+        if ((error as any).name === 'ExpiredTokenError') {
             return res.status(401).json({ error: 'Token expired' });
         }
 
-        if (error instanceof Errors.InvalidDomainError) {
+        if ((error as any).name === 'InvalidDomainError') {
             return res.status(401).json({ error: 'Invalid domain' });
         }
 

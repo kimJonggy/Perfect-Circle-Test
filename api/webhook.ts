@@ -7,7 +7,7 @@ import {
     setUserNotificationDetails,
     deleteUserNotificationDetails,
     sendMiniAppNotification,
-} from '../src/lib/notifications';
+} from '../src/lib/notifications.js';
 
 // Neynar API key for verification
 const NEYNAR_API_KEY = process.env.NEYNAR_API_KEY || 'D621FF22-667A-43F8-88E2-1B2CCBAAC740';
@@ -20,9 +20,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     try {
         // Parse the webhook event
-        const data = await parseWebhookEvent(req.body, verifyAppKeyWithNeynar, {
-            neynarApiKey: NEYNAR_API_KEY,
-        });
+        const data = await parseWebhookEvent(req.body, verifyAppKeyWithNeynar) as any;
 
         const { fid } = data;
 
@@ -33,7 +31,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
                 // Save notification details if present
                 if (data.notificationDetails) {
-                    setUserNotificationDetails(fid, data.notificationDetails);
+                    await setUserNotificationDetails(fid, data.notificationDetails);
 
                     // Send welcome notification
                     await sendMiniAppNotification({
@@ -47,15 +45,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
             case 'miniapp_removed': {
                 console.log(`[Webhook] miniapp_removed for fid ${fid}`);
-                deleteUserNotificationDetails(fid);
+                await deleteUserNotificationDetails(fid);
                 break;
             }
 
             case 'notifications_enabled': {
                 console.log(`[Webhook] notifications_enabled for fid ${fid}`);
 
-                if (data.notificationDetails) {
-                    setUserNotificationDetails(fid, data.notificationDetails);
+                if ((data as any).notificationDetails) {
+                    await setUserNotificationDetails(fid, (data as any).notificationDetails);
 
                     // Send confirmation notification
                     await sendMiniAppNotification({
@@ -69,7 +67,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
             case 'notifications_disabled': {
                 console.log(`[Webhook] notifications_disabled for fid ${fid}`);
-                deleteUserNotificationDetails(fid);
+                await deleteUserNotificationDetails(fid);
                 break;
             }
 
