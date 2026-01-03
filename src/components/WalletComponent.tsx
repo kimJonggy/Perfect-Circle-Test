@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
 import { Button } from '@/components/ui/button';
 
