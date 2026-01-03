@@ -34,7 +34,10 @@ export function WalletComponent() {
     return (
         <Button
             onClick={() => {
-                const connector = connectors[0]; // Use first connector (coinbaseWallet)
+                // Try to find Coinbase Wallet first, then fallback to first available (Injected)
+                const cbConnector = connectors.find(c => c.id === 'coinbaseWalletSDK');
+                const connector = cbConnector || connectors[0];
+
                 if (connector) {
                     connect({ connector });
                 }

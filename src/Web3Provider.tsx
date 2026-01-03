@@ -1,7 +1,7 @@
 import React from 'react';
 import { WagmiProvider, createConfig, http } from 'wagmi';
 import { base } from 'wagmi/chains';
-import { coinbaseWallet } from 'wagmi/connectors';
+import { coinbaseWallet, injected } from 'wagmi/connectors';
 import {
   QueryClientProvider,
   QueryClient,
@@ -16,11 +16,12 @@ const APP_METADATA = {
 export const config = createConfig({
   chains: [base], // Base Mainnet only
   connectors: [
-    // Coinbase Wallet for Smart Wallet connection
+    // Coinbase Wallet
     coinbaseWallet({
       appName: APP_METADATA.name,
-      preference: 'smartWalletOnly',
     }),
+    // Injected (Fallback for other wallets / standard webviews)
+    injected(),
   ],
   transports: {
     [base.id]: http(),
