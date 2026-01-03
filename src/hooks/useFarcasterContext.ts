@@ -146,11 +146,20 @@ export function useFarcasterContext(): FarcasterContextData {
                             cameraAndMicrophoneAccess: context.features.cameraAndMicrophoneAccess,
                         });
                     }
+
+                    // Signal to Farcaster that the app is ready
+                    sdk.actions.ready();
                 }
             } catch (error) {
                 console.error('Error loading Farcaster context:', error);
             } finally {
                 setIsLoading(false);
+                // Also call ready in case of error to dismiss splash screen
+                try {
+                    sdk.actions.ready();
+                } catch (e) {
+                    // Ignore if not in mini app
+                }
             }
         };
 
