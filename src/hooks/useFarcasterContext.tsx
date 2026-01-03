@@ -163,12 +163,10 @@ export function FarcasterProvider({ children }: { children: ReactNode }) {
                 setIsLoading(false);
                 // Also call ready in case of error to dismiss splash screen
                 try {
-                    // Only call ready if we haven't already
-                    if (!sdk.context) { // Just a check, sdk.actions.ready() is safe to call multiple times usually but best practice
-                        sdk.actions.ready();
-                    }
+                    // Call ready in case of error (or if we skipped it) to dismiss splash screen
+                    await sdk.actions.ready();
                 } catch (e) {
-                    // Ignore
+                    // Ignore if ready call fails (e.g. not in miniapp context)
                 }
             }
         };
@@ -187,8 +185,8 @@ export function FarcasterProvider({ children }: { children: ReactNode }) {
     };
 
     return (
-        <FarcasterContext.Provider value= { value } >
-        { children }
+        <FarcasterContext.Provider value={value} >
+            {children}
         </FarcasterContext.Provider>
     );
 }
