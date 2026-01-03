@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, createContext, useContext, ReactNode } from 'react';
 import { sdk } from '@farcaster/miniapp-sdk';
 
 // User profile data
@@ -74,23 +74,30 @@ export interface FeaturesContext {
     cameraAndMicrophoneAccess?: boolean;
 }
 
-// Full context data returned by hook
+// Full context data
 export interface FarcasterContextData {
-    // Loading state
     isLoading: boolean;
     isInMiniApp: boolean;
-
-    // Context data
     user: FarcasterUser | null;
     location: MiniAppLocationContext | null;
     client: ClientContext | null;
     features: FeaturesContext | null;
-
-    // Raw context for advanced use cases
     rawContext: unknown;
 }
 
-export function useFarcasterContext(): FarcasterContextData {
+const defaultContext: FarcasterContextData = {
+    isLoading: true,
+    isInMiniApp: false,
+    user: null,
+    location: null,
+    client: null,
+    features: null,
+    rawContext: null,
+};
+
+const FarcasterContext = createContext<FarcasterContextData>(defaultContext);
+
+export function FarcasterProvider({ children }: { children: ReactNode }) {
     const [isLoading, setIsLoading] = useState(true);
     const [isInMiniApp, setIsInMiniApp] = useState(false);
     const [user, setUser] = useState<FarcasterUser | null>(null);
@@ -156,9 +163,12 @@ export function useFarcasterContext(): FarcasterContextData {
                 setIsLoading(false);
                 // Also call ready in case of error to dismiss splash screen
                 try {
-                    sdk.actions.ready();
+                    // Only call ready if we haven't already
+                    if (!sdk.context) { // Just a check, sdk.actions.ready() is safe to call multiple times usually but best practice
+                        sdk.actions.ready();
+                    }
                 } catch (e) {
-                    // Ignore if not in mini app
+                    // Ignore
                 }
             }
         };
@@ -166,7 +176,7 @@ export function useFarcasterContext(): FarcasterContextData {
         loadContext();
     }, []);
 
-    return {
+    const value = {
         isLoading,
         isInMiniApp,
         user,
@@ -175,9 +185,19 @@ export function useFarcasterContext(): FarcasterContextData {
         features,
         rawContext,
     };
+
+    return (
+        <FarcasterContext.Provider value= { value } >
+        { children }
+        </FarcasterContext.Provider>
+    );
 }
 
-// Convenience hooks for specific context parts
+export function useFarcasterContext(): FarcasterContextData {
+    return useContext(FarcasterContext);
+}
+
+// Convenience hooks
 export function useFarcasterUser() {
     const { user, isLoading, isInMiniApp } = useFarcasterContext();
     return { user, isLoading, isInMiniApp };
