@@ -107,7 +107,7 @@ export async function sendMiniAppNotification(
                 notificationId: crypto.randomUUID(),
                 title,
                 body,
-                targetUrl: targetUrl ?? process.env.NEXT_PUBLIC_URL ?? 'https://perfectcircle-based.vercel.app/',
+                targetUrl: targetUrl ?? process.env.NEXT_PUBLIC_URL ?? 'https://based-pc-test.vercel.app/',
                 tokens: [details.token],
             }),
         });
