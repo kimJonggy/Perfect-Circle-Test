@@ -7,16 +7,16 @@
   "miniapp": {
     "version": "1",
     "name": "Perfect Circle",
-    "homeUrl": "https://based-perfectcircle.vercel.app/",
-    "iconUrl": "https://based-perfectcircle.vercel.app/icon.png",
-    "splashImageUrl": "https://based-perfectcircle.vercel.app/splash.png",
+    "homeUrl": "https://based-pc-test.vercel.app/",
+    "iconUrl": "https://based-pc-test.vercel.app/icon.png",
+    "splashImageUrl": "https://based-pc-test.vercel.app/splash.png",
     "splashBackgroundColor": "#0A0E1A",
     "subtitle": "Draw a perfect circle on Base",
     "description": "Challenge yourself to draw the most perfect circle. Get graded on your accuracy and mint your score as an NFT on Base!",
     "screenshotUrls": [
-      "https://based-perfectcircle.vercel.app/s1.png",
-      "https://based-perfectcircle.vercel.app/s2.png",
-      "https://based-perfectcircle.vercel.app/s3.png"
+      "https://based-pc-test.vercel.app/s1.png",
+      "https://based-pc-test.vercel.app/s2.png",
+      "https://based-pc-test.vercel.app/s3.png"
     ],
     "primaryCategory": "entertainment",
     "tags": [
@@ -25,12 +25,12 @@
       "base",
       "nft"
     ],
-    "heroImageUrl": "https://based-perfectcircle.vercel.app/og.png",
+    "heroImageUrl": "https://based-pc-test.vercel.app/og.png",
     "tagline": "How perfect is your circle?",
     "ogTitle": "Perfect Circle",
     "ogDescription": "Draw a perfect circle and mint your score as an NFT on Base.",
-    "ogImageUrl": "https://based-perfectcircle.vercel.app/og.png",
-    "webhookUrl": "https://based-perfectcircle.vercel.app/api/webhook",
+    "ogImageUrl": "https://based-pc-test.vercel.app/og.png",
+    "webhookUrl": "https://based-pc-test.vercel.app/api/webhook",
     "noindex": true
   }
 }

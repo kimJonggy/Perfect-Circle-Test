@@ -10,7 +10,7 @@ import {
 // App metadata
 const APP_METADATA = {
   name: 'Perfect Circle',
-  iconUrl: 'https://perfectcircle-based.vercel.app/icon.png',
+  iconUrl: 'https://based-pc-test.vercel.app/icon.png',
 };
 
 export const config = createConfig({
