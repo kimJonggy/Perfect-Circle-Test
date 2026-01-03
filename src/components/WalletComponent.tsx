@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
 import { Button } from '@/components/ui/button';
 
@@ -10,6 +11,17 @@ export function WalletComponent() {
     const formatAddress = (addr: string) => {
         return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
     };
+
+    // Auto-connect
+    useEffect(() => {
+        if (!isConnected && !isPending && connectors.length > 0) {
+            const cbConnector = connectors.find(c => c.id === 'coinbaseWalletSDK');
+            const connector = cbConnector || connectors[0];
+            if (connector) {
+                connect({ connector });
+            }
+        }
+    }, [isConnected, isPending, connectors, connect]);
 
     if (isConnected && address) {
         return (
