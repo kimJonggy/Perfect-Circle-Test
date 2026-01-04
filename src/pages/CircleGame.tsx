@@ -714,6 +714,23 @@ const CircleGame: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
 
+          <div className="flex gap-2 justify-center mb-4 px-4">
+            <Button
+              onClick={downloadPhotocard}
+              className="w-1/2 bg-green-600 hover:bg-green-700 text-white"
+            >
+              <Download className="w-4 h-4 mr-2" />
+              Download
+            </Button>
+            <Button
+              onClick={handleMint}
+              disabled={isPending || isMinting}
+              className="w-1/2 bg-purple-600 hover:bg-purple-700 text-white"
+            >
+              {isPending || isMinting ? 'Minting...' : 'Mint'}
+            </Button>
+          </div>
+
           <div className="flex items-center justify-center p-0" ref={reportCardRef}>
             <div className="report-card-wrapper w-full">
               <div className="blackboard-container mx-auto">
@@ -752,20 +769,6 @@ const CircleGame: React.FC = () => {
               onClick={() => setIsPhotocardOpen(false)}
             >
               Close
-            </Button>
-            <Button
-              onClick={downloadPhotocard}
-              className="w-full bg-green-600 hover:bg-green-700"
-            >
-              <Download className="w-4 h-4 mr-2" />
-              Download Image
-            </Button>
-            <Button
-              onClick={handleMint}
-              disabled={isPending || isMinting}
-              className="w-full bg-purple-600 hover:bg-purple-700 text-white"
-            >
-              {isPending || isMinting ? 'Minting...' : 'Mint Score on Chain'}
             </Button>
           </DialogFooter>
         </DialogContent>
