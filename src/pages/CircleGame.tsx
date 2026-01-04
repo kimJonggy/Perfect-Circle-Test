@@ -714,21 +714,20 @@ const CircleGame: React.FC = () => {
             </DialogDescription>
           </DialogHeader>
 
-          <div className="flex gap-2 justify-center mb-4 px-4">
-            <Button
+          <div className="flex gap-2 justify-center mb-4 px-4 w-full">
+            <button
               onClick={downloadPhotocard}
-              className="w-1/2 bg-green-600 hover:bg-green-700 text-white"
+              className="w-1/2 shiny-btn shiny-btn-green"
             >
-              <Download className="w-4 h-4 mr-2" />
               Download
-            </Button>
-            <Button
+            </button>
+            <button
               onClick={handleMint}
               disabled={isPending || isMinting}
-              className="w-1/2 bg-purple-600 hover:bg-purple-700 text-white"
+              className="w-1/2 shiny-btn shiny-btn-blue"
             >
               {isPending || isMinting ? 'Minting...' : 'Mint'}
-            </Button>
+            </button>
           </div>
 
           <div className="flex items-center justify-center p-0" ref={reportCardRef}>
