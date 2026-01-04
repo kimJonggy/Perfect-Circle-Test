@@ -36,14 +36,7 @@ export function WalletComponent() {
                 <Name className='text-white inline-block' />
               </span>
             </ConnectWallet>
-            <div className="bodydrop" />
-            <span aria-hidden="true" className="particle-pen">
-              {[...Array(8)].map((_, i) => (
-                <svg key={i} className="particle" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M6.937 3.846L7.75 1L8.563 3.846C8.77313 4.58114 9.1671 5.25062 9.70774 5.79126C10.2484 6.3319 10.9179 6.72587 11.653 6.936L14.5 7.75L11.654 8.563C10.9189 8.77313 10.2494 9.1671 9.70874 9.70774C9.1681 10.2484 8.77413 10.9179 8.564 11.653L7.75 14.5L6.937 11.654C6.72687 10.9189 6.3329 10.2494 5.79226 9.70874C5.25162 9.1681 4.58214 8.77413 3.847 8.564L1 7.75L3.846 6.937C4.58114 6.72687 5.25062 6.3329 5.79126 5.79226C6.3319 5.25162 6.72587 4.58214 6.936 3.847L6.937 3.846Z" fill="black" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              ))}
-            </span>
+
           </div>
         </StyledWrapper>
         <WalletDropdown>
@@ -87,22 +80,22 @@ const StyledWrapper = styled.div`
   		),
   		hsl(260 calc(var(--active) * 97%) calc((var(--active) * 44%) + 12%));
     background: var(--bg);
-    font-size: 1.2rem;
+    font-size: 0.9rem; /* Reduced from 1.2rem */
     font-weight: 500;
     border: 0;
     cursor: pointer;
-    padding: 0.8em 1em;
+    padding: 0.4em 0.8em; /* Reduced from 0.8em 1em */
     display: flex;
     align-items: center;
     gap: 0.25em;
     white-space: nowrap;
     border-radius: 100px;
     position: relative;
-    box-shadow: 0 0 calc(var(--active) * 3em) calc(var(--active) * 1em) hsl(260 97% 61% / 0.75),
+    box-shadow: 0 0 calc(var(--active) * 1.5em) calc(var(--active) * 0.5em) hsl(260 97% 61% / 0.75),
   		0 0em 0 0 hsl(260 calc(var(--active) * 97%) calc((var(--active) * 50%) + 30%)) inset,
-  		0 -0.05em 0 0 hsl(260 calc(var(--active) * 97%) calc(var(--active) * 60%)) inset;
+  		0 -0.05em 0 0 hsl(260 calc(var(--active) * 97%) calc(var(--active) * 60%)) inset; /* Reduced shadow spread */
     transition: box-shadow var(--transition), scale var(--transition), background var(--transition);
-    scale: calc(1 + (var(--active) * 0.1));
+    scale: calc(1 + (var(--active) * 0.05)); /* Reduced scale effect */
     transition: .3s;
   }
 
@@ -153,9 +146,9 @@ const StyledWrapper = styled.div`
   .sparkle-button:before {
     content: "";
     position: absolute;
-    inset: -0.2em;
+    inset: -0.1em; /* Reduced border offset */
     z-index: -1;
-    border: 0.25em solid hsl(260 97% 50% / 0.5);
+    border: 0.15em solid hsl(260 97% 50% / 0.5); /* Thinner border */
     border-radius: 100px;
     opacity: var(--active, 0);
     transition: opacity var(--transition);
@@ -224,15 +217,6 @@ const StyledWrapper = styled.div`
       --active: 1;
       --play-state: running;
     }
-
-    .bodydrop {
-      display: none;
-    }
-  }
-
-  .sparkle-button:is(:hover, :focus-visible) ~ :is(.bodydrop, .particle-pen) {
-    --active: 1;
-    --play-state: runnin;
   }
 
   .sparkle-button:is(:hover, :focus-visible) {
@@ -242,48 +226,6 @@ const StyledWrapper = styled.div`
 
   .sp {
     position: relative;
-  }
-
-  .particle-pen {
-    position: absolute;
-    width: 200%;
-    aspect-ratio: 1;
-    top: 50%;
-    left: 50%;
-    translate: -50% -50%;
-    -webkit-mask: radial-gradient(white, transparent 65%);
-    z-index: -1;
-    opacity: var(--active, 0);
-    transition: opacity var(--transition);
-  }
-
-  .particle {
-    fill: white;
-    width: calc(var(--size, 0.25) * 1rem);
-    aspect-ratio: 1;
-    position: absolute;
-    top: calc(var(--y) * 1%);
-    left: calc(var(--x) * 1%);
-    opacity: var(--alpha, 1);
-    animation: float-out calc(var(--duration, 1) * 1s) calc(var(--delay) * -1s) infinite linear;
-    transform-origin: var(--origin-x, 1000%) var(--origin-y, 1000%);
-    z-index: -1;
-    animation-play-state: var(--play-state, paused);
-  }
-
-  .particle path {
-    fill: hsl(0 0% 90%);
-    stroke: none;
-  }
-
-  .particle:nth-of-type(even) {
-    animation-direction: reverse;
-  }
-
-  @keyframes float-out {
-    to {
-      rotate: 360deg;
-    }
   }
 
   .text {

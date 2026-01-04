@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { Download } from 'lucide-react';
+
 import html2canvas from 'html2canvas';
 import { useAccount, useWriteContract } from 'wagmi';
 import { uploadFileToIPFS, uploadJSONToIPFS } from '@/utils/pinata';
