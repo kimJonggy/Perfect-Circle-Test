@@ -15,7 +15,6 @@ import { useAccount, useWriteContract } from 'wagmi';
 import { uploadFileToIPFS, uploadJSONToIPFS } from '@/utils/pinata';
 import { WalletComponent } from '@/components/WalletComponent';
 import { useFarcasterContext, useSafeAreaInsets } from '@/hooks/useFarcasterContext';
-import { FarcasterLogin } from '@/components/FarcasterLogin';
 import { OnboardingModal } from '@/components/OnboardingModal';
 
 const CONTRACT_ADDRESS = "0x144be29ad3b8ad3c07d4db055ba7155cc5d9cfcd"; // Deployed on Base Mainnet
@@ -497,7 +496,6 @@ const CircleGame: React.FC = () => {
 
         {/* User Controls */}
         <div className="flex items-center gap-1 sm:gap-2">
-          <FarcasterLogin />
           <WalletComponent />
         </div>
       </div>
