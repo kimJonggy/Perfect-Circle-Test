@@ -284,8 +284,8 @@ All colors MUST be HSL.
 
 .blackboard-container {
     background-color: var(--board-bg);
-    width: 70vw;
-    /* 70% of viewport width per user request */
+    width: 300px;
+    /* Refined to 300px per user request */
     max-width: 450px;
     padding: 20px;
     border: 12px solid #5d4037;

@@ -80,7 +80,7 @@ const CircleGame: React.FC = () => {
       if (!blob) throw new Error("Failed to generate image blob");
 
       // 2. Upload to Pinata
-      toast({ title: "Uploading...", description: "Securing your report card on IPFS..." });
+      toast({ title: "Uploading...", description: "Transferring your report card to OnChain..." });
       const imageCid = await uploadFileToIPFS(blob);
       const imageUrl = `ipfs://${imageCid}`;
 
@@ -706,7 +706,7 @@ const CircleGame: React.FC = () => {
       </div>
 
       <Dialog open={isPhotocardOpen} onOpenChange={setIsPhotocardOpen}>
-        <DialogContent className="sm:max-w-md bg-zinc-900 border-zinc-800 text-white">
+        <DialogContent className="sm:max-w-md bg-zinc-900 border-zinc-800 text-white max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-2xl font-patrick text-center">Your Report Card</DialogTitle>
             <DialogDescription className="text-center text-zinc-400">
