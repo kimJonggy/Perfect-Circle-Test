@@ -492,7 +492,10 @@ const CircleGame: React.FC = () => {
         className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-3 py-2 bg-black/50 backdrop-blur-md"
         style={{ paddingTop: `${Math.max(safeArea.top, 4)}px` }}
       >
-        <span className="text-base sm:text-xl font-bold chalk-text">🎯 Perfect Circle</span>
+        <div className="flex items-center gap-2">
+          <img src="/icon.png" alt="Perfect Circle" className="h-8 w-8 rounded-full" />
+          <span className="text-base sm:text-xl font-bold rock-salt-regular text-white">Perfect Circle</span>
+        </div>
 
         {/* User Controls */}
         <div className="flex items-center gap-1 sm:gap-2">
