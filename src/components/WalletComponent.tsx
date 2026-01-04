@@ -11,17 +11,6 @@ export function WalletComponent() {
         return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
     };
 
-    // Auto-connect
-    useEffect(() => {
-        if (!isConnected && !isPending && connectors.length > 0) {
-            const cbConnector = connectors.find(c => c.id === 'coinbaseWalletSDK');
-            const connector = cbConnector || connectors[0];
-            if (connector) {
-                connect({ connector });
-            }
-        }
-    }, [isConnected, isPending, connectors, connect]);
-
     if (isConnected && address) {
         return (
             <div className="flex items-center gap-2">
