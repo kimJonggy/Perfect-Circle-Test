@@ -1,27 +1,21 @@
 import React from 'react';
 import { WagmiProvider, createConfig, http } from 'wagmi';
 import { base } from 'wagmi/chains';
-import { coinbaseWallet, injected } from 'wagmi/connectors';
+import { coinbaseWallet } from 'wagmi/connectors';
+import { OnchainKitProvider } from '@coinbase/onchainkit';
 import {
   QueryClientProvider,
   QueryClient,
 } from "@tanstack/react-query";
 
-// App metadata
-const APP_METADATA = {
-  name: 'Perfect Circle',
-  iconUrl: 'https://based-pc-test.vercel.app/icon.png',
-};
+
 
 export const config = createConfig({
-  chains: [base], // Base Mainnet only
+  chains: [base],
   connectors: [
-    // Coinbase Wallet
     coinbaseWallet({
-      appName: APP_METADATA.name,
+      appName: 'Perfect Circle',
     }),
-    // Injected (Fallback for other wallets / standard webviews)
-    injected(),
   ],
   transports: {
     [base.id]: http(),
@@ -34,7 +28,9 @@ export const Web3Providers = ({ children }: { children: React.ReactNode }) => {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        {children}
+        <OnchainKitProvider chain={base}>
+          {children}
+        </OnchainKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
   );
